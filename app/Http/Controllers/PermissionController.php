@@ -12,7 +12,7 @@ class PermissionController extends Controller
 
 public function index()
 {
-    $permissions = Permission::orderBy('created_at', 'DESC')->paginate(10);
+    $permissions = Permission::orderBy('created_at', 'ASC')->paginate(25);
 
     return view('permissions.list', compact('permissions'));
 }
@@ -54,19 +54,20 @@ public function index()
 
     // update permission
     public function update(Request $request, $id)
-    {
-        $permission = Permission::findOrFail($id);
+{
+    $permission = Permission::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|unique:permissions,name,' . $id
-        ]);
+    $request->validate([
+        'name' => 'required|unique:permissions,name,' . $id
+    ]);
 
-        $permission->update([
-            'name' => $request->name
-        ]);
+    $permission->update([
+        'name' => $request->name
+    ]);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully');
-    }
+    return redirect()->route('permissions.index')->with('success', 'Permission updated successfully');
+}
+
 
     // delete permission
     public function destroy($id)
