@@ -7,8 +7,17 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 
+
 class RoleController extends Controller
 {
+
+public function __construct()
+{
+    $this->middleware('permission:view roles')->only('index');
+    $this->middleware('permission:create roles')->only(['create', 'store']);
+    $this->middleware('permission:edit roles')->only(['edit', 'update']);
+    $this->middleware('permission:delete roles')->only('destroy');
+}
     // List all roles
     public function index()
     {

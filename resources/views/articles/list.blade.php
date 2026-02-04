@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Roles') }}
+                {{ __('Articles') }}
             </h2>
-            @can('create roles')
-            <a href="{{ route('roles.create') }}"
+            @can('create permissions')
+            <a href="{{ route('articles.create') }}"
                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                + Create Role
+                + Create Article
             </a>
             @endcan
         </div>
@@ -29,57 +29,55 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="border px-3 py-2">#</th>
-                                <th class="border px-3 py-2">Role Name</th>
-                                <th class="border px-3 py-2">Permission</th>
+                                <th class="border px-3 py-2">Title</th>
+                                <th class="border px-3 py-2">Author</th>
                                 <th class="border px-3 py-2">Created</th>
                                 <th class="border px-3 py-2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($roles as $role)
+                            @forelse($articles as $article)
                                 <tr>
-                                    <td class="border px-3 py-2">{{ $role->id }}</td>
-                                    <td class="border px-3 py-2">{{ $role->name }}</td>
-                                    <td class="border px-3 py-2">
-                                    @if($role->permissions->count())
-                                        @foreach($role->permissions as $permission)
-                                            <span class="inline-block bg-gray-200 text-sm px-2 py-1 rounded mr-1 mb-1">
-                                                {{ $permission->name }}
-                                            </span>
-                                        @endforeach
-                                    @else
-                                        <span class="text-gray-400">No Permission</span>
-                                    @endif
-                                </td>
+                                    <td class="border px-3 py-2">{{ $article->id }}</td>
+                                    <td class="border px-3 py-2">{{ $article->title }}</td>
+                                    <td class="border px-3 py-2">{{ $article->author }}</td>
+                                    <td class="border px-3 py-2">{{ $article->created_at->format('d M Y') }}</td>
+                                    <td class="border px-3 py-2 flex gap-2">
 
-                                    <td class="border px-3 py-2">{{ $role->created_at->format('d M Y') }}</td>
-                                    <td class="border px-3 py-2">
-                                         @can('edit roles')
-                                        <a href="{{ route('roles.edit', $role->id) }}"
-                                           class="text-blue-600 mr-2">
-                                           Edit
+                                        {{-- View Button --}}
+                                        <a href="{{ route('articles.show', $article->id) }}"
+                                           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                                            View
                                         </a>
-                                         @endcan
 
-                                         @can('delete roles')
-                                        <form action="{{ route('roles.destroy', $role->id) }}"
+                                        {{-- Edit Button --}}
+                                        @can('edit articles')
+                                        <a href="{{ route('articles.edit', $article->id) }}"
+                                           class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                                            Edit
+                                        </a>
+                                        @endcan
+
+                                        @can('delete articles')
+                                        {{-- Delete Button --}}
+                                        <form action="{{ route('articles.destroy', $article->id) }}"
                                               method="POST"
                                               class="inline"
                                               onsubmit="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600">
+                                            <button type="submit"
+                                                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                                                 Delete
                                             </button>
                                         </form>
                                         @endcan
-
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-3">
-                                        No roles found
+                                    <td colspan="6" class="text-center py-3">
+                                        No articles found
                                     </td>
                                 </tr>
                             @endforelse
@@ -88,7 +86,7 @@
 
                     {{-- Pagination --}}
                     <div class="mt-4">
-                        {{ $roles->links() }}
+                        {{ $articles->links() }}
                     </div>
 
                 </div>

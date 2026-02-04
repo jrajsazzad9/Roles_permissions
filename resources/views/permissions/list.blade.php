@@ -4,10 +4,13 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Permissions') }}
             </h2>
+
+             @can('create permissions')
             <a href="{{ route('permissions.create') }}"
                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                 + Create Permission
             </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -34,13 +37,21 @@
                     <tbody>
                         @forelse($permissions as $permission)
                             <tr>
-                                <td class="border px-3 py-2">{{ $loop->iteration }}</td>
+                                
+                                
+                                <td class="border px-3 py-2">{{ $permission->id }}</td>
                                 <td class="border px-3 py-2">{{ $permission->name }}</td>
                                 <td class="border px-3 py-2">{{ $permission->created_at->format('d M Y') }}</td>
+                               
                                 <td class="border px-3 py-2">
+                                     @can('edit permissions')
                                     <a href="{{ route('permissions.edit', $permission->id) }}"
                                        class="text-blue-600 mr-2">Edit</a>
 
+                                       @endcan
+
+
+                                    @can('delete permissions')
                                     <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -50,6 +61,8 @@
                                             Delete
                                         </button>
                                     </form>
+                                    @endcan
+
                                 </td>
                             </tr>
                         @empty
